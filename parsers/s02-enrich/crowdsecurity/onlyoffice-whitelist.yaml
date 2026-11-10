@@ -1,0 +1,7 @@
+name: crowdsecurity/onlyoffice-whitelist
+description: "Whitelist events from OnlyOffice DocumentServer"
+filter: "evt.Meta.service == 'http' && evt.Meta.log_type in ['http_access-log', 'http_error-log']"
+whitelist:
+  reason: "OnlyOffice DocumentServer assets"
+  expression:
+   - evt.Meta.http_status in ['200', '304'] && evt.Meta.http_verb == 'GET' && evt.Meta.http_path matches '^(/onlyoffice)?/[0-9]+[.][0-9]+[.][0-9]+-[0-9a-f]{20,}/' #DocumentServer serves its assets from /<version>-<hash>/, and the ones without extension (fonts, cache, downloads) are not seen as static by http-crawl-non_statics
